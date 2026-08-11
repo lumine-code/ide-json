@@ -108,3 +108,36 @@ describe("ide-json adapter", () => {
     ]);
   });
 });
+
+describe("ide-json feature contracts", () => {
+  const features = [
+    "diagnostics",
+    "autocomplete",
+    "hover",
+    "symbols",
+    "outline",
+    "format",
+    "codeActions",
+  ];
+  const definitions = require("../package.json").configSchema.features.properties;
+
+  beforeEach(async () => {
+    await lumine.packages.activatePackage("ide-json");
+  });
+
+  afterEach(async () => {
+    for (const feature of features) lumine.config.unset(`ide-json.features.${feature}`);
+    await lumine.packages.deactivatePackage("ide-json");
+  });
+
+  for (const feature of features) {
+    it(`exposes ${feature} as an independent enabled-by-default switch`, () => {
+      expect(definitions[feature].type).toBe("boolean");
+      expect(definitions[feature].default).toBe(true);
+      const keyPath = `ide-json.features.${feature}`;
+      expect(lumine.config.get(keyPath)).toBe(true);
+      lumine.config.set(keyPath, false);
+      expect(lumine.config.get(keyPath)).toBe(false);
+    });
+  }
+});
