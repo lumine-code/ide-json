@@ -1,0 +1,7 @@
+{
+  "$schema": "./fixture.schema.json",
+  "$ref": "#/theme",
+  "theme": "l",
+  "accent": "#ff0000",
+  "extra": true,
+}

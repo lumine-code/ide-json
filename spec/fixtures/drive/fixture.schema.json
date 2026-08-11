@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "$ref": { "type": "string" },
+    "theme": { "enum": ["light", "dark"], "description": "Selected theme." },
+    "accent": { "type": "string", "format": "color-hex", "description": "Accent color." }
+  },
+  "required": ["theme"],
+  "additionalProperties": false
+}

@@ -1,0 +1,98 @@
+{
+  "name": "ide-json full feature matrix",
+  "adapter": "ide-json",
+  "project": "fixtures/drive",
+  "file": "fixtures/drive/fixture.json",
+  "grammarScope": "source.json",
+  "config": { "ide-json.json.schemaDownload.enable": false },
+  "checks": [
+    {
+      "name": "completion",
+      "method": "textDocument/completion",
+      "position": [3, 13],
+      "params": { "context": { "triggerKind": 1 } },
+      "expect": { "path": "items.*.label", "includes": "\"light\"" }
+    },
+    {
+      "name": "hover",
+      "method": "textDocument/hover",
+      "position": [3, 4],
+      "expect": { "path": "contents", "matches": "Selected theme" }
+    },
+    {
+      "name": "document symbols",
+      "method": "textDocument/documentSymbol",
+      "expect": { "path": "*.name", "includes": "theme" }
+    },
+    {
+      "name": "formatting",
+      "method": "textDocument/formatting",
+      "params": { "options": { "tabSize": 4, "insertSpaces": true } },
+      "expect": { "type": "array", "minLength": 1 }
+    },
+    {
+      "name": "range formatting",
+      "method": "textDocument/rangeFormatting",
+      "params": {
+        "range": {
+          "start": { "line": 0, "character": 0 },
+          "end": { "line": 6, "character": 1 }
+        },
+        "options": { "tabSize": 4, "insertSpaces": true }
+      },
+      "expect": { "type": "array", "minLength": 1 }
+    },
+    {
+      "name": "document colors",
+      "method": "textDocument/documentColor",
+      "expect": { "type": "array", "minLength": 1 }
+    },
+    {
+      "name": "color presentations",
+      "method": "textDocument/colorPresentation",
+      "paramsFrom": {
+        "color": { "check": "document colors", "path": "0.color" },
+        "range": { "check": "document colors", "path": "0.range" }
+      },
+      "expect": { "path": "*.label", "includes": "#ff0000" }
+    },
+    {
+      "name": "folding ranges",
+      "method": "textDocument/foldingRange",
+      "expect": { "type": "array", "minLength": 1 }
+    },
+    {
+      "name": "selection ranges",
+      "method": "textDocument/selectionRange",
+      "params": { "positions": [{ "line": 3, "character": 12 }] },
+      "expect": { "path": "0.parent", "type": "object" }
+    },
+    {
+      "name": "document links",
+      "method": "textDocument/documentLink",
+      "expect": { "type": "array", "minLength": 1 }
+    },
+    {
+      "name": "code actions",
+      "method": "textDocument/codeAction",
+      "params": {
+        "range": {
+          "start": { "line": 0, "character": 0 },
+          "end": { "line": 6, "character": 1 }
+        },
+        "context": { "diagnostics": [] }
+      },
+      "expect": { "path": "*.title", "includes": "Sort JSON" }
+    },
+    {
+      "name": "diagnostics",
+      "method": "textDocument/diagnostic",
+      "expect": { "path": "items", "type": "array", "minLength": 3 }
+    },
+    {
+      "name": "restart lifecycle",
+      "kind": "restart",
+      "expect": { "path": "current", "equals": "running" }
+    }
+  ]
+}

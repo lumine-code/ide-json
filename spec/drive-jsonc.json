@@ -1,0 +1,19 @@
+{
+  "name": "ide-json JSONC matrix",
+  "adapter": "ide-json",
+  "project": "fixtures/drive",
+  "file": "fixtures/drive/settings.jsonc",
+  "grammarScope": "source.json.jsonc",
+  "checks": [
+    {
+      "name": "JSONC diagnostics",
+      "method": "textDocument/diagnostic",
+      "expect": { "path": "items.*.message", "includes": "Trailing comma" }
+    },
+    {
+      "name": "JSONC symbols",
+      "method": "textDocument/documentSymbol",
+      "expect": { "path": "*.name", "includes": "enabled" }
+    }
+  ]
+}
