@@ -1,0 +1,174 @@
+{
+  "name": "ide-json",
+  "author": "lumine-code",
+  "description": "JSON language-server adapter.",
+  "repository": "https://github.com/lumine-code/ide-json",
+  "bugs": {
+    "url": "https://github.com/lumine-code/ide-json/issues"
+  },
+  "keywords": [
+    "language-server",
+    "lsp",
+    "json",
+    "jsonc",
+    "json-schema",
+    "intellisense"
+  ],
+  "version": "1.0.0",
+  "license": "MIT",
+  "engines": {
+    "lumine": "^1.0.0"
+  },
+  "main": "./lib/main",
+  "files": [
+    "lib",
+    "spec"
+  ],
+  "scripts": {
+    "test": "lumine --test spec",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "consumedServices": {
+    "ide-client": {
+      "versions": {
+        "^1.0.0": "consumeIdeClient"
+      }
+    }
+  },
+  "dependencies": {
+    "vscode-langservers-extracted": "4.10.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.8.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-n": "^18.2.2",
+    "globals": "^17.9.0",
+    "prettier": "^3.9.6",
+    "vscode-jsonrpc": "^9.0.1"
+  },
+  "configSchema": {
+    "serverPath": {
+      "title": "Server Path",
+      "description": "Absolute path to a `vscode-json-language-server` executable. Leave empty to use the bundled server.",
+      "type": "string",
+      "default": ""
+    },
+    "features": {
+      "title": "Features",
+      "description": "Which parts of the JSON server the editor uses. Turning one off hands it to the next server serving the same file.",
+      "type": "object",
+      "properties": {
+        "diagnostics": {
+          "title": "Diagnostics",
+          "description": "Report syntax and schema validation errors in the linter.",
+          "type": "boolean",
+          "default": true
+        },
+        "autocomplete": {
+          "title": "Autocomplete",
+          "description": "Offer properties and values from the active schema.",
+          "type": "boolean",
+          "default": true
+        },
+        "hover": {
+          "title": "Hover",
+          "description": "Show descriptions from the active schema on hover.",
+          "type": "boolean",
+          "default": true
+        },
+        "symbols": {
+          "title": "Symbols",
+          "description": "Serve document symbols to go-to-symbol.",
+          "type": "boolean",
+          "default": true
+        },
+        "outline": {
+          "title": "Outline",
+          "description": "Fill the outline panel with the document structure.",
+          "type": "boolean",
+          "default": true
+        },
+        "format": {
+          "title": "Format",
+          "description": "Format whole JSON documents and selected ranges.",
+          "type": "boolean",
+          "default": true
+        },
+        "codeActions": {
+          "title": "Code Actions",
+          "description": "Offer JSON source actions such as sorting object keys.",
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "json": {
+      "title": "JSON",
+      "description": "Schema, validation, result-limit and formatting options sent to the language server.",
+      "type": "object",
+      "properties": {
+        "schemas": {
+          "title": "Schemas",
+          "description": "JSON Schema associations. Each item accepts fileMatch patterns plus a schema URL or inline schema object.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fileMatch": {
+                "title": "File Matches",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "url": {
+                "title": "Schema URL",
+                "type": "string"
+              },
+              "schema": {
+                "title": "Inline Schema",
+                "type": "object"
+              }
+            }
+          },
+          "default": []
+        },
+        "resultLimit": {
+          "title": "Maximum Results",
+          "description": "Maximum symbols, colors and other computed items returned for one document.",
+          "type": "integer",
+          "minimum": 1,
+          "default": 5000
+        },
+        "keepLines": {
+          "title": "Keep Existing Lines",
+          "description": "Preserve existing line positions where possible when formatting.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "http": {
+      "title": "HTTP",
+      "description": "Proxy used when the server downloads remote schemas.",
+      "type": "object",
+      "properties": {
+        "proxy": {
+          "title": "Proxy",
+          "description": "Proxy URL. Leave empty for a direct connection.",
+          "type": "string",
+          "default": ""
+        },
+        "proxyStrictSSL": {
+          "title": "Verify Proxy Certificates",
+          "description": "Verify the proxy certificate against trusted certificate authorities.",
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  }
+}
