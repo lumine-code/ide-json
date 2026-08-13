@@ -65,6 +65,7 @@ describe("ide-json adapter", () => {
   it("registers JSON and JSONC with their protocol language IDs", async () => {
     expect(adapter.id).toBe("ide-json");
     expect(adapter.grammarScopes).toEqual(["source.json", "source.json.jsonc"]);
+    lumine.config.set("ide-json.json.allowComments", false);
     expect(adapter.languageIdForScope("source.json")).toBe("json");
     expect(adapter.languageIdForScope("source.json.jsonc")).toBe("jsonc");
     expect(adapter.settingsKeyPaths).toEqual(["ide-json"]);
@@ -104,6 +105,36 @@ describe("ide-json adapter", () => {
     });
     expect(adapter.getWorkspaceConfiguration()).toEqual(adapter.getSettings());
     expect(adapter.getWorkspaceConfiguration("unknown")).toBeUndefined();
+  });
+
+  it("announces .json files as JSONC while comments are allowed", () => {
+    // The server has no setting for this: the comment policy follows the
+    // language id, so the setting can only work by changing what we announce.
+    expect(lumine.config.get("ide-json.json.allowComments")).toBe(true);
+    expect(adapter.languageIdForScope("source.json")).toBe("jsonc");
+    lumine.config.set("ide-json.json.allowComments", false);
+    expect(adapter.languageIdForScope("source.json")).toBe("json");
+    // JSONC never depends on the setting.
+    expect(adapter.languageIdForScope("source.json.jsonc")).toBe("jsonc");
+  });
+
+  it("restarts sessions when the language id would change", () => {
+    // A document's language id is fixed at didOpen, so the running session has
+    // to reopen its documents for the new setting to reach the server.
+    const restarted = [];
+    const session = { adapter: null, state: "running" };
+    const service = {
+      registerAdapter(registered) {
+        session.adapter = registered;
+        return { dispose() {} };
+      },
+      getSessions: () => [session],
+      restart: async (target) => restarted.push(target),
+    };
+    const subscription = main.consumeIdeClient(service);
+    lumine.config.set("ide-json.json.allowComments", false);
+    expect(restarted).toEqual([session]);
+    subscription.dispose();
   });
 
   it("turns schema validation off with the diagnostics feature", () => {

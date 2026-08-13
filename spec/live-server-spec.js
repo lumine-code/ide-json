@@ -178,6 +178,31 @@ describe("ide-json bundled server", () => {
     expect(closed.items).toEqual([]);
   });
 
+  it("silences the comment error for a .json file announced as JSONC", async () => {
+    // The comment policy is not configurable on the server: it follows the
+    // language id, which is what ide-json.json.allowComments chooses.
+    const filePath = path.join(rootPath, "config.json");
+    const source = ["{", "  // a comment", '  "enabled": true', "}"].join("\n");
+    fs.writeFileSync(filePath, source);
+    const uri = fileUri(filePath);
+    await client.start();
+
+    client.open(uri, "json", source);
+    const strict = await client.request("textDocument/diagnostic", {
+      textDocument: { uri },
+    });
+    expect(strict.items.map(({ message }) => message)).toEqual([
+      "Comments are not permitted in JSON.",
+    ]);
+    client.closeDocument(uri);
+
+    client.open(uri, "jsonc", source, 2);
+    const relaxed = await client.request("textDocument/diagnostic", {
+      textDocument: { uri },
+    });
+    expect(relaxed.items).toEqual([]);
+  });
+
   it("accepts JSONC comments and reports its non-strict trailing-comma warning", async () => {
     const filePath = path.join(rootPath, "settings.jsonc");
     const source = ["{", "  // retained comment", '  "enabled": true,', "}"].join("\n");
