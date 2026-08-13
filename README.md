@@ -1,6 +1,6 @@
 # ide-json
 
-JSON and JSON-with-comments language-server adapter.
+JSON language-server adapter.
 
 Registers the JSON server from [vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted) with the bundled `ide-client` package, providing schema-aware completion, validation, documentation, navigation, source actions, colors, folding, selection ranges, and formatting.
 
@@ -9,7 +9,7 @@ Registers the JSON server from [vscode-langservers-extracted](https://github.com
 - **Bundled server**: ships an exact server version, with an optional custom executable path.
 - **Managed upgrade**: installs a newer server from npm when you want one, and removing it returns to the bundled copy.
 - **JSON Schema**: associates local, remote, or inline schemas with file patterns.
-- **Validation**: reports JSON/JSONC syntax and schema problems through LSP pull diagnostics.
+- **Validation**: reports JSON/JSONC syntax and schema problems through LSP pull diagnostics, accepting comments in `.json` files unless you ask for strict JSON.
 - **Editing intelligence**: offers schema-backed completion and hover documentation.
 - **Document tools**: provides symbols, outline data, schema links, colors, folding, selection ranges, sorting, and formatting.
 - **Feature switches**: each editor-facing capability can be handed to another language server serving the same file.
