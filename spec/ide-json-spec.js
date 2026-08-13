@@ -65,7 +65,6 @@ describe("ide-json adapter", () => {
   it("registers JSON and JSONC with their protocol language IDs", async () => {
     expect(adapter.id).toBe("ide-json");
     expect(adapter.grammarScopes).toEqual(["source.json", "source.json.jsonc"]);
-    lumine.config.set("ide-json.json.allowComments", false);
     expect(adapter.languageIdForScope("source.json")).toBe("json");
     expect(adapter.languageIdForScope("source.json.jsonc")).toBe("jsonc");
     expect(adapter.settingsKeyPaths).toEqual(["ide-json"]);
@@ -107,20 +106,32 @@ describe("ide-json adapter", () => {
     expect(adapter.getWorkspaceConfiguration("unknown")).toBeUndefined();
   });
 
-  it("announces .json files as JSONC while comments are allowed", () => {
-    // The server has no setting for this: the comment policy follows the
-    // language id, so the setting can only work by changing what we announce.
+  it("drops only the comment report while comments are allowed", () => {
+    const trailingComma = { message: "Trailing comma", code: 519, severity: 1 };
+    const comment = { message: "Comments are not permitted in JSON.", code: 521, severity: 1 };
+    const schema = { message: "Value is not accepted.", code: 1, severity: 1 };
+
     expect(lumine.config.get("ide-json.json.allowComments")).toBe(true);
-    expect(adapter.languageIdForScope("source.json")).toBe("jsonc");
+    // The trailing comma keeps its error severity: the file is still JSON, and
+    // only the one report the setting names is removed.
+    expect(adapter.transformDiagnostics([comment, trailingComma, schema])).toEqual([
+      trailingComma,
+      schema,
+    ]);
+
     lumine.config.set("ide-json.json.allowComments", false);
-    expect(adapter.languageIdForScope("source.json")).toBe("json");
-    // JSONC never depends on the setting.
-    expect(adapter.languageIdForScope("source.json.jsonc")).toBe("jsonc");
+    expect(adapter.transformDiagnostics([comment, trailingComma, schema])).toEqual([
+      comment,
+      trailingComma,
+      schema,
+    ]);
   });
 
-  it("restarts sessions when the language id would change", () => {
-    // A document's language id is fixed at didOpen, so the running session has
-    // to reopen its documents for the new setting to reach the server.
+  it("needs no restart for the comment setting", () => {
+    // settingsKeyPaths covers the whole ide-json namespace, and re-pushing the
+    // settings pulls diagnostics again — which is the only thing the filter
+    // needs. Restarting a server to change what we do with its output would be
+    // a server restart per checkbox.
     const restarted = [];
     const session = { adapter: null, state: "running" };
     const service = {
@@ -133,6 +144,8 @@ describe("ide-json adapter", () => {
     };
     const subscription = main.consumeIdeClient(service);
     lumine.config.set("ide-json.json.allowComments", false);
+    expect(restarted).toEqual([]);
+    lumine.config.set("ide-json.serverPath", "/elsewhere/server");
     expect(restarted).toEqual([session]);
     subscription.dispose();
   });

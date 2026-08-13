@@ -17,6 +17,22 @@ const registerAdapter = () => {
   return { adapter, disposable };
 };
 
+// The server returns minimal whitespace edits rather than one document-wide
+// replacement, so what it did to a comment is only visible once they are applied.
+const applyEdits = (text, edits) => {
+  const offsets = text
+    .split("\n")
+    .reduce((all, line) => [...all, all.at(-1) + line.length + 1], [0]);
+  const offsetAt = ({ line, character }) => offsets[line] + character;
+  return [...edits]
+    .sort((a, b) => offsetAt(b.range.start) - offsetAt(a.range.start))
+    .reduce(
+      (out, { range, newText }) =>
+        out.slice(0, offsetAt(range.start)) + newText + out.slice(offsetAt(range.end)),
+      text,
+    );
+};
+
 describe("ide-json bundled server", () => {
   let adapter, client, disposable, rootPath;
   let originalTimeout;
@@ -178,29 +194,49 @@ describe("ide-json bundled server", () => {
     expect(closed.items).toEqual([]);
   });
 
-  it("silences the comment error for a .json file announced as JSONC", async () => {
-    // The comment policy is not configurable on the server: it follows the
-    // language id, which is what ide-json.json.allowComments chooses.
+  it("filters the comment report a strict .json document earns", async () => {
+    // Announced as JSON, because it is JSON: the server reports the comment and
+    // keeps the trailing comma an error, and only the first of those is dropped.
     const filePath = path.join(rootPath, "config.json");
-    const source = ["{", "  // a comment", '  "enabled": true', "}"].join("\n");
+    const source = ["{", "  // a comment", '  "enabled": true,', "}"].join("\n");
     fs.writeFileSync(filePath, source);
     const uri = fileUri(filePath);
     await client.start();
-
     client.open(uri, "json", source);
-    const strict = await client.request("textDocument/diagnostic", {
-      textDocument: { uri },
-    });
-    expect(strict.items.map(({ message }) => message)).toEqual([
-      "Comments are not permitted in JSON.",
-    ]);
-    client.closeDocument(uri);
 
-    client.open(uri, "jsonc", source, 2);
-    const relaxed = await client.request("textDocument/diagnostic", {
+    const report = await client.request("textDocument/diagnostic", {
       textDocument: { uri },
     });
-    expect(relaxed.items).toEqual([]);
+    expect(
+      report.items.map(({ message, code, severity }) => ({ message, code, severity })),
+    ).toEqual([
+      { message: "Trailing comma", code: 519, severity: 1 },
+      { message: "Comments are not permitted in JSON.", code: 521, severity: 1 },
+    ]);
+
+    // 521 is the code the adapter filters on; nothing else carries it.
+    expect(adapter.transformDiagnostics(report.items).map(({ message }) => message)).toEqual([
+      "Trailing comma",
+    ]);
+  });
+
+  it("formats a .json document without disturbing its comments", async () => {
+    // Why the comments are left in the text the server sees: it formats them
+    // correctly, and a document with them hidden comes back without them.
+    const filePath = path.join(rootPath, "formatted.json");
+    const source = ["{", "// a comment", '    "enabled":true', "}"].join("\n");
+    fs.writeFileSync(filePath, source);
+    const uri = fileUri(filePath);
+    await client.start();
+    client.open(uri, "json", source);
+
+    const edits = await client.request("textDocument/formatting", {
+      textDocument: { uri },
+      options: { tabSize: 2, insertSpaces: true },
+    });
+    expect(applyEdits(source, edits)).toBe(
+      ["{", "  // a comment", '  "enabled": true', "}"].join("\n"),
+    );
   });
 
   it("accepts JSONC comments and reports its non-strict trailing-comma warning", async () => {

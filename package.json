@@ -112,7 +112,7 @@
       "properties": {
         "allowComments": {
           "title": "Allow Comments in .json Files",
-          "description": "Announce `.json` files to the server as JSONC, so comments are accepted instead of reported as \"Comments are not permitted in JSON\". Trailing commas are still reported, as a warning rather than an error. `.jsonc` files always allow comments. Editors reopen when this changes.",
+          "description": "Drop the server's \"Comments are not permitted in JSON.\" report for `.json` files. Everything else about them stays strict, trailing commas included, and `.jsonc` files are unaffected.",
           "type": "boolean",
           "default": true
         },
