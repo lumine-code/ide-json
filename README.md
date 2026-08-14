@@ -17,11 +17,11 @@ Registers the JSON server from [vscode-langservers-extracted](https://github.com
 
 ## Installation
 
-To install `ide-json` search for _ide-json_ in the Install pane of the Lumine settings or run `lumine --install lumine-code/ide-json`.
+To install `ide-json` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/ide-json`.
 
 ## Services
 
-- **ide-client** (`^1.0.0`): consumed to register the JSON adapter with the editor's language-server client.
+- `ide-client`: consumed to register the JSON adapter with the editor's language-server client.
 
 ## Contributing
 
