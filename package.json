@@ -85,14 +85,7 @@
         },
         "symbols": {
           "title": "Symbols",
-          "description": "Serve document symbols to go-to-symbol.",
-          "scopeResolution": "grammar",
-          "type": "boolean",
-          "default": true
-        },
-        "outline": {
-          "title": "Outline",
-          "description": "Fill the outline panel with the document structure.",
+          "description": "Serve document symbols to navigation features.",
           "scopeResolution": "grammar",
           "type": "boolean",
           "default": true

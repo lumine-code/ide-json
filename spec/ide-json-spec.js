@@ -163,7 +163,6 @@ describe("ide-json adapter", () => {
       "autocomplete",
       "hover",
       "symbols",
-      "outline",
       "format",
       "codeActions",
     ]);
@@ -171,15 +170,7 @@ describe("ide-json adapter", () => {
 });
 
 describe("ide-json feature contracts", () => {
-  const features = [
-    "diagnostics",
-    "autocomplete",
-    "hover",
-    "symbols",
-    "outline",
-    "format",
-    "codeActions",
-  ];
+  const features = ["diagnostics", "autocomplete", "hover", "symbols", "format", "codeActions"];
   const definitions = require("../package.json").configSchema.features.properties;
 
   beforeEach(async () => {
