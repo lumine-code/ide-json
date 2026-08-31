@@ -68,6 +68,7 @@ describe("ide-json adapter", () => {
     expect(adapter.languageIdForScope("source.json")).toBe("json");
     expect(adapter.languageIdForScope("source.json.jsonc")).toBe("jsonc");
     expect(adapter.settingsKeyPaths).toEqual(["ide-json"]);
+    expect(adapter.restartKeyPaths).toEqual(["ide-json.serverPath", "ide-json.features.format"]);
     const launch = await adapter.resolveServer({ rootPath: __dirname });
     expect(launch.cwd).toBe(__dirname);
     expect(launch.transport).toBe("stdio");
@@ -127,27 +128,8 @@ describe("ide-json adapter", () => {
     ]);
   });
 
-  it("needs no restart for the comment setting", () => {
-    // settingsKeyPaths covers the whole ide-json namespace, and re-pushing the
-    // settings pulls diagnostics again — which is the only thing the filter
-    // needs. Restarting a server to change what we do with its output would be
-    // a server restart per checkbox.
-    const restarted = [];
-    const session = { adapter: null, state: "running" };
-    const service = {
-      registerAdapter(registered) {
-        session.adapter = registered;
-        return { dispose() {} };
-      },
-      getSessions: () => [session],
-      restart: async (target) => restarted.push(target),
-    };
-    const subscription = main.consumeIdeClient(service);
-    lumine.config.set("ide-json.json.allowComments", false);
-    expect(restarted).toEqual([]);
-    lumine.config.set("ide-json.serverPath", "/elsewhere/server");
-    expect(restarted).toEqual([session]);
-    subscription.dispose();
+  it("keeps the client-only comment filter out of the restart contract", () => {
+    expect(adapter.restartKeyPaths).not.toContain("ide-json.json.allowComments");
   });
 
   it("turns schema validation off with the diagnostics feature", () => {
