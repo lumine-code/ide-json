@@ -68,7 +68,7 @@ describe("ide-json adapter", () => {
     expect(adapter.languageIdForScope("source.json")).toBe("json");
     expect(adapter.languageIdForScope("source.json.jsonc")).toBe("jsonc");
     expect(adapter.settingsKeyPaths).toEqual(["ide-json"]);
-    expect(adapter.restartKeyPaths).toEqual(["ide-json.serverPath", "ide-json.features.format"]);
+    expect(adapter.restartKeyPaths).toEqual(["ide-json.serverPath"]);
     const launch = await adapter.resolveServer({ rootPath: __dirname });
     expect(launch.cwd).toBe(__dirname);
     expect(launch.transport).toBe("stdio");
@@ -80,8 +80,8 @@ describe("ide-json adapter", () => {
       handledSchemaProtocols: ["file", "http", "https"],
     });
     lumine.config.set("ide-json.features.format", false);
-    expect(adapter.getInitializationOptions().provideFormatter).toBe(false);
-    expect(adapter.getSettings().json.format.enable).toBe(false);
+    expect(adapter.getInitializationOptions().provideFormatter).toBe(true);
+    expect(adapter.getSettings().json.format.enable).toBe(true);
   });
 
   it("transcribes schemas, result limits and HTTP settings", () => {
@@ -132,10 +132,10 @@ describe("ide-json adapter", () => {
     expect(adapter.restartKeyPaths).not.toContain("ide-json.json.allowComments");
   });
 
-  it("turns schema validation off with the diagnostics feature", () => {
+  it("leaves schema validation available for grammar-scoped feature overrides", () => {
     expect(adapter.getSettings().json.validate.enable).toBe(true);
     lumine.config.set("ide-json.features.diagnostics", false);
-    expect(adapter.getSettings().json.validate.enable).toBe(false);
+    expect(adapter.getSettings().json.validate.enable).toBe(true);
   });
 
   it("offers switches for exactly the capabilities consumed by the editor", () => {
@@ -148,6 +148,14 @@ describe("ide-json adapter", () => {
       "format",
       "codeActions",
     ]);
+  });
+
+  it("describes the result limit and search keywords accurately", () => {
+    const pkg = require("../package.json");
+    expect(pkg.configSchema.json.properties.resultLimit.description).toBe(
+      "Maximum document symbols returned for one document.",
+    );
+    expect(pkg.keywords.some((keyword) => pkg.name.includes(keyword))).toBe(false);
   });
 });
 

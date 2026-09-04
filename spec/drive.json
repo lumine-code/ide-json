@@ -4,7 +4,6 @@
   "project": "fixtures/drive",
   "file": "fixtures/drive/fixture.json",
   "grammarScope": "source.json",
-  "config": { "ide-json.json.schemaDownload.enable": false },
   "checks": [
     {
       "name": "completion",

@@ -9,9 +9,9 @@
   "keywords": [
     "language-server",
     "lsp",
-    "json",
     "jsonc",
     "json-schema",
+    "configuration",
     "intellisense"
   ],
   "version": "1.0.0",
@@ -145,7 +145,7 @@
         },
         "resultLimit": {
           "title": "Maximum Results",
-          "description": "Maximum symbols, colors and other computed items returned for one document.",
+          "description": "Maximum document symbols returned for one document.",
           "type": "integer",
           "minimum": 1,
           "default": 5000
