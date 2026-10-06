@@ -2,7 +2,7 @@
 
 JSON language-server adapter.
 
-Registers the JSON server from [vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted) with the `ide-client` package, providing schema-aware completion, validation, documentation, navigation, source actions, colors, folding, selection ranges, and formatting.
+Registers the JSON server from [vscode-langservers-extracted](https://github.com/hrsh7th/vscode-langservers-extracted) with the `ide` package, providing schema-aware completion, validation, documentation, navigation, source actions, colors, folding, selection ranges, and formatting.
 
 ## Features
 
@@ -19,11 +19,11 @@ Registers the JSON server from [vscode-langservers-extracted](https://github.com
 
 To install `ide-json` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/ide-json`.
 
-Install `ide-client` first.
+Install `ide` first.
 
 ## Services
 
-- `ide-client`: consumed to register the JSON adapter with the editor's language-server client.
+- `ide`: consumed to register the JSON adapter with the editor's language-server client.
 
 ## Contributing
 
