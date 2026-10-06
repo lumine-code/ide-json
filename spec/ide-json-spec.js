@@ -92,19 +92,18 @@ describe("ide-json adapter", () => {
     lumine.config.set("ide-json.http.proxy", "http://proxy.test");
     lumine.config.set("ide-json.http.proxyStrictSSL", false);
 
-    expect(adapter.getWorkspaceConfiguration("json")).toEqual({
+    expect(adapter.getSettings().json).toEqual({
       validate: { enable: true },
       format: { enable: true },
       keepLines: { enable: true },
       schemas,
       resultLimit: 123,
     });
-    expect(adapter.getWorkspaceConfiguration("http")).toEqual({
+    expect(adapter.getSettings().http).toEqual({
       proxy: "http://proxy.test",
       proxyStrictSSL: false,
     });
-    expect(adapter.getWorkspaceConfiguration()).toEqual(adapter.getSettings());
-    expect(adapter.getWorkspaceConfiguration("unknown")).toBeUndefined();
+    expect(adapter.getWorkspaceConfiguration).toBeUndefined();
   });
 
   it("drops only the comment report while comments are allowed", () => {
