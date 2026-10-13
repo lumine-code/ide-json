@@ -15,6 +15,8 @@ Registers the JSON server from [vscode-langservers-extracted](https://github.com
 - **Feature switches**: each editor-facing capability can be handed to another language server serving the same file.
 - **Project sessions**: one server per project root, started lazily with the first JSON or JSONC editor.
 
+![The JSON language server identifies a trailing comma and its location.](.github/demo.png)
+
 ## Installation
 
 To install `ide-json` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/ide-json`.

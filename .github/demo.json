@@ -1,0 +1,16 @@
+{
+  "title": "ide-json",
+  "description": "The JSON language server identifies a trailing comma and its location.",
+  "recordedOn": "2026-10-13",
+  "sourceRevision": "f447b5c77e0d98c6f9929862f6ba663f2d92f48a",
+  "mode": "normal",
+  "fontSettings": "default",
+  "images": [
+    {
+      "file": "demo.png",
+      "label": "The JSON language server identifies a trailing comma and its location.",
+      "width": 1100,
+      "height": 490
+    }
+  ]
+}
