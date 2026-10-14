@@ -1,16 +1,96 @@
 {
   "title": "ide-json",
   "description": "The JSON language server identifies a trailing comma and its location.",
-  "recordedOn": "2026-10-13",
-  "sourceRevision": "f447b5c77e0d98c6f9929862f6ba663f2d92f48a",
+  "recordedOn": "2026-10-14",
+  "sourceRevision": "78d78bb4bfbe6b193d42a5618e14c7dfd132b333",
+  "themeSourceRevision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
   "mode": "normal",
   "fontSettings": "default",
+  "scenario": "demo.js",
+  "recipeHash": "30d9f0dd17c2c635dd7a80220aa39e632f808079174e5b26aac124f65b3f1611",
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "electron": "44.7.0",
+    "chrome": "152.0.7977.130",
+    "devicePixelRatio": 1,
+    "locale": "en-GB",
+    "fontFamily": "Fira Code, Menlo, DejaVu Sans Mono, Consolas, monospace",
+    "fontSize": 14,
+    "themes": ["one-day-syntax", "one-day-ui"]
+  },
+  "viewport": { "width": 1100, "height": 490 },
+  "cornerRadius": 10,
+  "sources": {
+    "editor": {
+      "revision": "8be8f86075ad93df038610d82b3ac6d99329957d",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "package": {
+      "revision": "78d78bb4bfbe6b193d42a5618e14c7dfd132b333",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "ide-json": {
+      "revision": "78d78bb4bfbe6b193d42a5618e14c7dfd132b333",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "documentation-view": {
+      "revision": "eedd6f69e19677399ddd9617858da255bb8f189c",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "hover": {
+      "revision": "4db1205d5c41405ba1d5c0d741eeaf3399e3693f",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "ide": {
+      "revision": "812c09829d25abb79f6292280d1eb54fc80b6c82",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "language-json": {
+      "revision": "0df16be15c8825aa71fcdfd96edb01db605c588f",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "linter": {
+      "revision": "adec0e9d64ffe64f9e041df825324efc0795601b",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "linter-panel": {
+      "revision": "52b4727794bf840757d2c6ec818329f954ecfb25",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "marker": {
+      "revision": "bb4fc8fec8c9d09fe59db9b0d70352ff33cde8f8",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "one-theme": {
+      "revision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "fixtures": [
+    {
+      "file": "ide-json/signal.json",
+      "sha256": "816354bfde7a319c05323267b262c47ef472f8d1b7684520e7bfb076b3e6aa7b"
+    }
+  ],
   "images": [
     {
       "file": "demo.png",
       "label": "The JSON language server identifies a trailing comma and its location.",
       "width": 1100,
-      "height": 490
+      "height": 490,
+      "sha256": "a4c00fe3b75b59d076657f3037d97fa4ee797fd1c8072c267e3b46c46f123b31"
     }
   ]
 }
