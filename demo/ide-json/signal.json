@@ -1,0 +1,8 @@
+{
+  "name": "signal-lab",
+  "samples": [0.2, 0.8, -0.4, 0.5, 1.0],
+  "processing": {
+    "window": 3,
+    "normalize": true,
+  }
+}
